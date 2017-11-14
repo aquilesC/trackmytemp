@@ -25,19 +25,15 @@
         </nav>
 
         <div class="container">
-
-            {% for comment in comments %}
             <div class="row">
-                {{ comment.name }}
+                <h1>{{ sensor.name }}</h1>
             </div>
-            {% endfor %}
-
+            {% for measurement in measurements %}
             <div class="row">
-                <form action="." method="POST">
-                    <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
-                    <input type="submit" class="btn btn-success" value="Post comment">
-                </form>
+                <span>{{ measurement.creation }}</span>
+                <span>{{ measurement.value }}</span>
             </div>
+            {%  endfor %}
 
         </div>
 
