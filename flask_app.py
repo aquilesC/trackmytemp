@@ -8,7 +8,7 @@ app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="aquic",
-    password="rsvp2370",
+    password="mysql_password",
     hostname="localhost",
     databasename="sensors",
 )
