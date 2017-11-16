@@ -6,9 +6,9 @@ app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="aquic",
-    password="mysql_password",
-    hostname="aquic.mysql.pythonanywhere-services.com",
-    databasename="aquic$default",
+    password="rsvp2370",
+    hostname="localhost",
+    databasename="sensors",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
@@ -27,9 +27,9 @@ class Comment(db.Model):
 def index():
     if request.method == "GET":
         return render_template("main.html", comments=Comment.query.all())
+    if request.method == "POST":
+        comment = Comment(content=request.form['contents'])
+        db.session.add(comment)
+        db.session.commit()
 
-    comment = Comment(content=request.data)
-    db.session.add(comment)
-    db.session.commit()
-
-    return redirect(url_for('index'))
+        return redirect(url_for('index'))
