@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from flask import Flask, redirect, render_template, request, url_for
@@ -8,7 +9,7 @@ app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="aquic",
-    password="mysql_password",
+    password=os.environ['DBPASS'],
     hostname="localhost",
     databasename="sensors",
 )
@@ -18,6 +19,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+
 class Sensor(db.Model):
 
     __tablename__ = "sensors"
@@ -26,6 +28,7 @@ class Sensor(db.Model):
     name = db.Column(db.String(4096))
     measurements = db.relationship('Measurement', backref='sensors', lazy=True)
     creation = db.Column(db.Time())
+
 
 class Measurement(db.Model):
 
@@ -41,7 +44,7 @@ class Measurement(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("main.html", comments=Sensor.query.all())
+        return render_template("main.html", sensors=Sensor.query.all())
 
     sensor = Sensor(name=request.form['contents'])
     sensor.creation = datetime.now()
@@ -65,11 +68,16 @@ def measurement(sensor_id):
         return render_template("measurement.html", sensor=s, measurements=m)
 
     elif request.method == "POST":
-        value = request.data
+        value = request.form
         m = Measurement()
+        m.value=value['value']
+        m.sensor_id=sensor_id
+        db.session.add(m)
+        db.session.commit()
+        return redirect(url_for('index'))
 
 
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 8080, True)
+    app.run('0.0.0.0', 8080, False)
