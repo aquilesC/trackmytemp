@@ -25,19 +25,15 @@
         </nav>
 
         <div class="container">
-
-            {% for sensor in sensors %}
             <div class="row">
-                <a href="meas/{{ sensor.id }}">{{ sensor.name }}</a>
+                <h1>{{ sensor.name }}</h1>
             </div>
-            {% endfor %}
-
+            {% for measurement in measurements %}
             <div class="row">
-                <form action="." method="POST">
-                    <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
-                    <input type="submit" class="btn btn-success" value="Post comment">
-                </form>
+                <span>{{ measurement.measure_time }}</span>
+                <span>{{ measurement.value }}</span>
             </div>
+            {%  endfor %}
 
         </div>
 
