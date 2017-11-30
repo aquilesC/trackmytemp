@@ -71,8 +71,8 @@ def measurement(sensor_id):
         db.session.commit()
         return redirect(url_for('index'))
 
-@app.route("/plot/<int:sensor_id>", methods=["GET",])
-def measurement_plot(sensor_id):
+@app.route("/plot.png")
+def measurement_plot():
     import io
     import random
     import datetime
