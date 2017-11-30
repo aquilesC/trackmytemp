@@ -50,6 +50,11 @@ def index():
 
     return redirect(url_for('index'))
 
+@app.route("/sens/<int:sensor_id>")
+def show_sensor(sensor_id):
+    s = Sensor.query.get(sensor_id)
+    return render_template("sensor.html", sensor=s)
+
 @app.route("/meas/<int:sensor_id>", methods=["GET", "POST"])
 def measurement(sensor_id):
     if request.method == "GET":
