@@ -32,7 +32,7 @@ class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensors.id'), nullable=False)
     value = db.Column(db.Float)
-    measure_time = db.Column(db.Time())
+    measure_time = db.Column(db.DateTime)
     def __init__(self):
         self.measure_time = datetime.now()
 
@@ -71,8 +71,8 @@ def measurement(sensor_id):
         db.session.commit()
         return redirect(url_for('index'))
 
-@app.route("/plot.png")
-def measurement_plot():
+@app.route("/plot/<int:sensor_id>")
+def measurement_plot(sensor_id):
     import io
     import random
     import datetime
@@ -82,23 +82,23 @@ def measurement_plot():
 
     from matplotlib.dates import DateFormatter
 
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id)
+    t = []
+    v = []
+    for m in measurements:
+        t.append(m.measure_time)
+        v.append(m.value)
+
     fig = Figure()
     ax = fig.add_subplot(111)
-    x = []
-    y = []
-    now = datetime.datetime.now()
-    delta = datetime.timedelta(days=1)
-    for i in range(10):
-        x.append(now)
-        now += delta
-        y.append(random.randint(0, 1000))
-    ax.plot_date(x, y, '-')
+    ax.plot_date(t, v, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
     fig.autofmt_xdate()
     canvas = FigureCanvas(fig)
-    png_output = io.StringIO()
+    png_output = io.BytesIO()
     canvas.print_png(png_output)
     response = make_response(png_output.getvalue())
+
     response.headers['Content-Type'] = 'image/png'
 
     return response
