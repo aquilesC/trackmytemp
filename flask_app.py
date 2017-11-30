@@ -66,11 +66,12 @@ def measurement(sensor_id):
 
     elif request.method == "POST":
         value = request.values.get('value', np.nan)
-        m = Measurement()
-        m.value=float(value)
-        m.sensor_id=sensor_id
-        db.session.add(m)
-        db.session.commit()
+        print(float(value))
+        # m = Measurement()
+        # m.value=float(value)
+        # m.sensor_id=sensor_id
+        # db.session.add(m)
+        # db.session.commit()
         return redirect(url_for('index'))
 
 @app.route("/plot/<int:sensor_id>")
