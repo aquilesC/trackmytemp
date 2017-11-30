@@ -67,7 +67,7 @@ def measurement(sensor_id):
     elif request.method == "POST":
         value = request.values.get('value', np.nan)
         m = Measurement()
-        m.value=value
+        m.value=float(value)
         m.sensor_id=sensor_id
         db.session.add(m)
         db.session.commit()
