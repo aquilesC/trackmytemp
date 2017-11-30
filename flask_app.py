@@ -70,15 +70,16 @@ def measurement(sensor_id):
 @app.route("/plot/<int:sensor_id>")
 def measurement_plot(sensor_id):
     import io
-    import random
-    import datetime
+    import matplotlib
+    matplotlib.rc('xtick', labelsize=15)
+    matplotlib.rc('ytick', labelsize=15)
 
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
     from matplotlib.figure import Figure
 
     from matplotlib.dates import DateFormatter
 
-    sensor = Sensor.query.filter_by(sensor_id=sensor_id).limit(1)
+    sensor = Sensor.query.get(sensor_id)
     measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc()).limit(2000)
     t = []
     v = []
@@ -87,11 +88,12 @@ def measurement_plot(sensor_id):
         v.append(m.value)
 
     fig = Figure()
+    fig.set_size_inches(18.5, 10.5)
     ax = fig.add_subplot(111)
     ax.plot_date(t, v, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d %H:%M'))
-    ax.set_xlabel('Time')
-    ax.set_ylabel(sensor.name)
+    ax.set_xlabel('Time', fontsize=20)
+    ax.set_ylabel(sensor.name, fontsize=20)
     fig.autofmt_xdate()
     canvas = FigureCanvas(fig)
     png_output = io.BytesIO()
