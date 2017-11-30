@@ -50,13 +50,6 @@ def index():
 
     return redirect(url_for('index'))
 
-@app.route("/<int:sensor_id>", methods=["GET",])
-def show_sensor(sensor_id):
-    if request.method != "GET":
-        return "Wrong Method"
-
-    return render_template("sensor.html", sensor=Sensor.query.get(sensor_id))
-
 @app.route("/meas/<int:sensor_id>", methods=["GET", "POST"])
 def measurement(sensor_id):
     if request.method == "GET":
@@ -85,6 +78,7 @@ def measurement_plot(sensor_id):
 
     from matplotlib.dates import DateFormatter
 
+    sensor = Sensor.query.filter_by(sensor_id=sensor_id).limit(1)
     measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc()).limit(2000)
     t = []
     v = []
@@ -94,8 +88,10 @@ def measurement_plot(sensor_id):
 
     fig = Figure()
     ax = fig.add_subplot(111)
-    ax.plot_date(t, v, '.')
+    ax.plot_date(t, v, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d %H:%M'))
+    ax.set_xlabel('Time')
+    ax.set_ylabel(sensor.name)
     fig.autofmt_xdate()
     canvas = FigureCanvas(fig)
     png_output = io.BytesIO()
