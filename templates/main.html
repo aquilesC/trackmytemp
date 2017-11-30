@@ -28,17 +28,17 @@
 
             {% for sensor in sensors %}
             <div class="row">
-                <a href="meas/{{ sensor.id }}">{{ sensor.name }}</a>
+                <a href="plot/{{ sensor.id }}">{{ sensor.name }}</a>
             </div>
             {% endfor %}
 
-            <div class="row">
+<!--            <div class="row">
                 <form action="." method="POST">
                     <textarea class="form-control" name="contents" placeholder="Name the sensor"></textarea>
                     <input type="submit" class="btn btn-success" value="Add Sensor">
                 </form>
             </div>
-
+-->
         </div>
 
     </body>

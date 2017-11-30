@@ -43,10 +43,10 @@ def index():
     if request.method == "GET":
         return render_template("main.html", sensors=Sensor.query.all())
 
-    sensor = Sensor(name=request.form['contents'])
-    sensor.creation = datetime.now()
-    db.session.add(sensor)
-    db.session.commit()
+    #sensor = Sensor(name=request.form['contents'])
+    #sensor.creation = datetime.now()
+    #db.session.add(sensor)
+    #db.session.commit()
 
     return redirect(url_for('index'))
 
