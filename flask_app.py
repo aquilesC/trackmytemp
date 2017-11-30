@@ -74,21 +74,25 @@ def measurement(sensor_id):
 @app.route("/plot/<int:sensor_id>", methods=["GET",])
 def measurement_plot(sensor_id):
     import io
+    import random
+    import datetime
+
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
     from matplotlib.figure import Figure
 
     from matplotlib.dates import DateFormatter
 
-    measurements = Measurement.query.filter_by(sensor_id=sensor_id)
-    t = []
-    v = []
-    for m in measurements:
-        t.append(m.measure_time)
-        v.append(m.value)
-
     fig = Figure()
     ax = fig.add_subplot(111)
-    ax.plot_date(t, v, '-')
+    x = []
+    y = []
+    now = datetime.datetime.now()
+    delta = datetime.timedelta(days=1)
+    for i in range(10):
+        x.append(now)
+        now += delta
+        y.append(random.randint(0, 1000))
+    ax.plot_date(x, y, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
     fig.autofmt_xdate()
     canvas = FigureCanvas(fig)
