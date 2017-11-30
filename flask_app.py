@@ -1,7 +1,8 @@
-import os
+import numpy as np
+
 from datetime import datetime
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, make_response
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, instance_relative_config=True)
@@ -30,7 +31,7 @@ class Measurement(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensors.id'), nullable=False)
-    value = db.Column(db.Integer)
+    value = db.Column(db.Float)
     measure_time = db.Column(db.Time())
     def __init__(self):
         self.measure_time = datetime.now()
@@ -70,6 +71,33 @@ def measurement(sensor_id):
         db.session.commit()
         return redirect(url_for('index'))
 
+@app.route("/plot/<int:sensor_id>", methods=["GET",])
+def measurement_plot(sensor_id):
+    import io
+    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+    from matplotlib.figure import Figure
+
+    from matplotlib.dates import DateFormatter
+
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id)
+    t = []
+    v = []
+    for m in measurements:
+        t.append(m.measure_time)
+        v.append(m.value)
+
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    ax.plot_date(t, v, '-')
+    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+    fig.autofmt_xdate()
+    canvas = FigureCanvas(fig)
+    png_output = io.StringIO()
+    canvas.print_png(png_output)
+    response = make_response(png_output.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+
+    return response
 
 
 
