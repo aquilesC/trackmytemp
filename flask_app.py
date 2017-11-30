@@ -4,6 +4,8 @@ from datetime import datetime
 
 from flask import Flask, redirect, render_template, request, url_for, make_response
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.wrappers import Response
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config["DEBUG"] = False
@@ -63,9 +65,9 @@ def measurement(sensor_id):
         return render_template("measurement.html", sensor=s, measurements=m)
 
     elif request.method == "POST":
-        value = request.form
+        value = request.values.get('value', np.nan)
         m = Measurement()
-        m.value=value['value']
+        m.value=value
         m.sensor_id=sensor_id
         db.session.add(m)
         db.session.commit()
@@ -107,3 +109,4 @@ def measurement_plot(sensor_id):
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 8080, False)
+    app.debug = True
