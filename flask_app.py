@@ -82,7 +82,7 @@ def measurement_plot(sensor_id):
 
     from matplotlib.dates import DateFormatter
 
-    measurements = Measurement.query.filter_by(sensor_id=sensor_id)
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc()).limit(2000)
     t = []
     v = []
     for m in measurements:
@@ -91,8 +91,8 @@ def measurement_plot(sensor_id):
 
     fig = Figure()
     ax = fig.add_subplot(111)
-    ax.plot_date(t, v, '-')
-    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+    ax.plot_date(t, v, '.')
+    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d %H:%M'))
     fig.autofmt_xdate()
     canvas = FigureCanvas(fig)
     png_output = io.BytesIO()
