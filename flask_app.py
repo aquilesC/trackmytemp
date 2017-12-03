@@ -9,7 +9,6 @@ from werkzeug.wrappers import Response
 import json
 import plotly
 
-import pandas as pd
 import numpy as np
 
 app = Flask(__name__, instance_relative_config=True)
