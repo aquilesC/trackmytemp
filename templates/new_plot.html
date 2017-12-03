@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
-        <title>My Sensors Homepage</title>
+        <title>My Sensors: {{ sensor.name }}</title>
     </head>
 
     <body>
@@ -23,24 +23,35 @@
             </div>
           </div>
         </nav>
-
         <div class="container">
-
-            {% for sensor in sensors %}
             <div class="row">
-                <h4><a href="/sens/{{ sensor.id }}">{{ sensor.name }}</a></h4>
-                <h6><a href="/new_plot/{{ sensor.id }}">New Plot Style</a></h6>
+    {% for id in ids %}
+        <h3>{{id}}</h3>
+        <div id="{{id}}"></div>
+    {% endfor %}
             </div>
-            {% endfor %}
-
-<!--            <div class="row">
-                <form action="." method="POST">
-                    <textarea class="form-control" name="contents" placeholder="Name the sensor"></textarea>
-                    <input type="submit" class="btn btn-success" value="Add Sensor">
-                </form>
-            </div>
--->
         </div>
 
-    </body>
+</body>
+
+
+<footer>
+    <!-- D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+
+    <script type="text/javascript">
+        var graphs = {{graphJSON | safe}};
+        var ids = {{ids | safe}};
+        for(var i in graphs) {
+            Plotly.plot(ids[i], // the ID of the div, created above
+                        graphs[i].data,
+                        graphs[i].layout || {});
+        }
+    </script>
+</footer>
+
 </html>

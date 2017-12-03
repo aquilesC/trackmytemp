@@ -6,6 +6,11 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.wrappers import Response
 
+import json
+import plotly
+
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__, instance_relative_config=True)
 app.config["DEBUG"] = False
@@ -108,7 +113,46 @@ def measurement_plot(sensor_id):
 
     return response
 
+@app.route("/new_plot/<int:sensor_id>")
+def new_plot(sensor_id):
+    sensor = Sensor.query.get(sensor_id)
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc()).limit(
+        2000)
+    t = []
+    v = []
+    for m in measurements:
+        t.append(m.measure_time)
+        v.append(m.value)
 
+
+    graphs = [
+        dict(
+            data=[
+                dict(
+                    x=t,
+                    y=v,
+                    type='scatter'
+                ),
+            ],
+            layout=dict(
+                title=sensor.name
+            )
+        ),
+    ]
+
+    # Add "ids" to each of the graphs to pass up to the client
+    # for templating
+    ids = [sensor.name]
+
+    # Convert the figures to JSON
+    # PlotlyJSONEncoder appropriately converts pandas, datetime, etc
+    # objects to their JSON equivalents
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template('new_plot.html',
+                           ids=ids,
+                           graphJSON=graphJSON,
+                           sensor = sensor)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 8080, False)
