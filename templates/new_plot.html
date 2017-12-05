@@ -25,6 +25,10 @@
         </nav>
         <div class="container">
             <div class="row">
+                <h6>Last measurement time: {{ last_time }}</h6>
+                <h6>Last value: {{ average_value }}</h6>
+            </div>
+            <div class="row">
     {% for id in ids %}
         <h3>{{id}}</h3>
         <div id="{{id}}"></div>

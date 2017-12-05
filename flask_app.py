@@ -123,7 +123,8 @@ def new_plot(sensor_id):
         t.append(m.measure_time)
         v.append(m.value)
 
-
+    last_time = t[0]
+    average_value = np.mean(v[:5])
     graphs = [
         dict(
             data=[
@@ -151,7 +152,9 @@ def new_plot(sensor_id):
     return render_template('new_plot.html',
                            ids=ids,
                            graphJSON=graphJSON,
-                           sensor = sensor)
+                           sensor = sensor,
+                           last_time = last_time,
+                           average_value = average_value)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 8080, False)
