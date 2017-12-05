@@ -1,39 +1,11 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-
-        <title>My Sensors: {{ sensor.name }}</title>
-    </head>
-
-    <body>
-        <nav class="navbar navbar-inverse">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="/">My Sensors</a>
-            </div>
-          </div>
-        </nav>
-
-        <div class="container">
-            <div class="row">
-                <h1>{{ sensor.name }}</h1>
-                <span>Crated on: {{ sensor.creation }}</span>
-            </div>
-            <div class="row">
-                <img class="img-responsive" src="/plot/{{ sensor.id }}">
-            </div>
-
-        </div>
-
-    </body>
-</html>
+{% extends "base.html" %}
+{% block title %}My Sensors: {{ sensor.name }}{% endblock %}
+{% block content %}
+    <div class="row">
+        <h1>{{ sensor.name }}</h1>
+        <span>Crated on: {{ sensor.creation }}</span>
+    </div>
+    <div class="row">
+        <img class="img-responsive" src="/plot/{{ sensor.id }}">
+    </div>
+{% endblock %}
