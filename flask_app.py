@@ -1,10 +1,7 @@
-import numpy as np
-
 from datetime import datetime
 
 from flask import Flask, redirect, render_template, request, url_for, make_response
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.wrappers import Response
 
 import json
 import plotly
