@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import json
 import plotly
-
+import time
 import numpy as np
 
 app = Flask(__name__, instance_relative_config=True)
@@ -112,8 +112,8 @@ def measurement_plot(sensor_id):
 @app.route("/new_plot/<int:sensor_id>")
 def new_plot(sensor_id):
     sensor = Sensor.query.get(sensor_id)
-    measurements = Measurement.query.filter_by(sensor_id=sensor_id).filter(Measurement.measure_time >= '2018-01-18').order_by(Measurement.measure_time.desc()).limit(
-        2000)
+    last_24_hours = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()-24*60*60))
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id).filter(Measurement.measure_time >= last_24_hours).order_by(Measurement.measure_time.desc())
     t = []
     v = []
     for m in measurements:
