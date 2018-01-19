@@ -112,7 +112,7 @@ def measurement_plot(sensor_id):
 @app.route("/new_plot/<int:sensor_id>")
 def new_plot(sensor_id):
     sensor = Sensor.query.get(sensor_id)
-    measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc()).limit(
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id).filter(Measurement.measure_time >= '2018-01-18').order_by(Measurement.measure_time.desc()).limit(
         2000)
     t = []
     v = []
@@ -128,7 +128,7 @@ def new_plot(sensor_id):
                 dict(
                     x=t,
                     y=v,
-                    type='scatter'
+                    type='scatter',
                 ),
             ],
             layout=dict(
