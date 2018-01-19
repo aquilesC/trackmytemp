@@ -5,7 +5,7 @@
 {% block content %}
             {% for sensor in sensors %}
             <div class="row">
-                <h4><a href="/new_plot/{{ sensor.id }}">New Plot Style</a></h4>
+                <h4><a href="/new_plot/{{ sensor.id }}">{{ sensor.name }}</a></h4>
             </div>
             {% endfor %}
 
