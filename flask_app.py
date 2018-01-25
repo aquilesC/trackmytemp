@@ -180,8 +180,7 @@ def range_plot(sensor_id):
                     dict(count=1,
                          label='1d',
                          step='day',
-                         stepmode='backward',
-                         active=True),
+                         stepmode='backward'),
                     dict(count=7,
                          label='1w',
                          step='day',
@@ -193,7 +192,7 @@ def range_plot(sensor_id):
                     dict(step='all')
                 ])
             ),
-            rangeslider=dict(),
+            rangeslider=dict(active=0),
             type='date'
         )
     )
