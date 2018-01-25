@@ -173,7 +173,7 @@ def range_plot(sensor_id):
     data = [trace]
 
     layout = dict(
-        title='Time series with range slider and selectors',
+        title='{} Values'.format(sensor.name),
         xaxis=dict(
             rangeselector=dict(
                 buttons=list([
@@ -181,14 +181,14 @@ def range_plot(sensor_id):
                          label='1d',
                          step='day',
                          stepmode='backward'),
-                    dict(count=6,
-                         label='6m',
-                         step='month',
+                    dict(count=1,
+                         label='6w',
+                         step='week',
                          stepmode='backward'),
                     dict(count=1,
-                         label='YTD',
-                         step='year',
-                         stepmode='todate'),
+                         label='1m',
+                         step='month',
+                         stepmode='backward'),
                     dict(count=1,
                          label='1y',
                          step='year',
