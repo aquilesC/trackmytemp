@@ -176,6 +176,7 @@ def range_plot(sensor_id):
     layout = dict(
         title='{} Values'.format(sensor.name),
         xaxis=dict(
+            range=list([last_24_hours, now]),
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -194,8 +195,7 @@ def range_plot(sensor_id):
                 ]),
             ),
             rangeslider={'visible':True,
-                         'bgcolor':"#f8faaa",
-                         'range':list([last_24_hours, now])},
+                         'bgcolor':"#f8faaa",},
             type='date',
         )
     )
