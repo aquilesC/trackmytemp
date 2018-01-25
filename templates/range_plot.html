@@ -4,7 +4,7 @@
             <div class="row">
     {% for id in ids %}
         <h3>{{id}}</h3>
-        <div id="{{id}}">{{ plot_div }}</div>
+        <div id="{{id}}">{{ plot_div|safe }}</div>
     {% endfor %}
             </div>
     <div class="row">
