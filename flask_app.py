@@ -181,7 +181,7 @@ def range_plot(sensor_id):
                          label='1d',
                          step='day',
                          stepmode='backward',
-                         active='true'),
+                         active=True),
                     dict(count=7,
                          label='1w',
                          step='day',
