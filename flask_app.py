@@ -153,6 +153,70 @@ def new_plot(sensor_id):
                            last_time = last_time,
                            average_value = average_value)
 
+@app.route("/range_plot/<int:sensor_id>")
+def range_plot(sensor_id):
+    import plotly.plotly as py
+    import plotly.graph_objs as go
+
+    sensor = Sensor.query.get(sensor_id)
+    measurements = Measurement.query.filter_by(sensor_id=sensor_id).order_by(Measurement.measure_time.desc())
+    t = []
+    v = []
+    for m in measurements:
+        t.append(m.measure_time)
+        v.append(m.value)
+
+    last_time = t[0]
+    average_value = np.mean(v[:5])
+
+    trace = go.Scatter(x=t, y=v)
+    data = [trace]
+
+    layout = dict(
+        title='Time series with range slider and selectors',
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label='1m',
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=6,
+                         label='6m',
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=1,
+                         label='YTD',
+                         step='year',
+                         stepmode='todate'),
+                    dict(count=1,
+                         label='1y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+            rangeslider=dict(),
+            type='date'
+        )
+    )
+
+    fig = dict(data=data, layout=layout)
+    plot_div = plotly.offline.plot(fig, include_plotlyjs=True, output_type='div')
+
+
+    # Add "ids" to each of the graphs to pass up to the client
+    # for templating
+    ids = [sensor.name]
+
+    return render_template('range_plot.html',
+                           ids=ids,
+                           plot_div=plot_div,
+                           sensor = sensor,
+                           last_time = last_time,
+                           average_value = average_value)
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', 8080, False)
     app.debug = True

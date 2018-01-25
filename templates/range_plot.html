@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}My Sensors: {{ sensor.name }}{% endblock %}
+{% block content %}
+            <div class="row">
+    {% for id in ids %}
+        <h3>{{id}}</h3>
+        <div id="{{id}}">{{ plot_div }}</div>
+    {% endfor %}
+            </div>
+    <div class="row">
+        <h6>Last measurement time: {{ last_time }}</h6>
+        <h6>Last value: {{ average_value }}</h6>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <!-- D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+
+    <script type="text/javascript">
+        var graphs = {{graphJSON | safe}};
+        var ids = {{ids | safe}};
+        for(var i in graphs) {
+            Plotly.plot(ids[i], // the ID of the div, created above
+                        graphs[i].data,
+                        graphs[i].layout || {});
+        }
+    </script>
+{% endblock %}
