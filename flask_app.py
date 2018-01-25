@@ -178,8 +178,8 @@ def range_plot(sensor_id):
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
-                         label='1m',
-                         step='month',
+                         label='1d',
+                         step='day',
                          stepmode='backward'),
                     dict(count=6,
                          label='6m',
