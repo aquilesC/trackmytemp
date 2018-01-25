@@ -192,7 +192,7 @@ def range_plot(sensor_id):
                     dict(step='all')
                 ])
             ),
-            rangeslider=dict(active=0),
+            rangeslider=dict(),
             type='date'
         )
     )
