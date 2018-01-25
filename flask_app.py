@@ -171,7 +171,8 @@ def range_plot(sensor_id):
 
     trace = go.Scatter(x=t, y=v)
     data = [trace]
-
+    last_24_hours = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()-24*60*60))
+    now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     layout = dict(
         title='{} Values'.format(sensor.name),
         xaxis=dict(
@@ -180,8 +181,7 @@ def range_plot(sensor_id):
                     dict(count=1,
                          label='1d',
                          step='day',
-                         stepmode='backward',
-                         active='true'),
+                         stepmode='backward'),
                     dict(count=7,
                          label='1w',
                          step='day',
@@ -191,10 +191,12 @@ def range_plot(sensor_id):
                          step='month',
                          stepmode='backward'),
                     dict(step='all')
-                ])
+                ]),
             ),
-            rangeslider=dict(),
-            type='date'
+            rangeslider={'visible':True,
+                         'bgcolor':"#f8faaa",
+                         'range':list([last_24_hours, now])},
+            type='date',
         )
     )
 
